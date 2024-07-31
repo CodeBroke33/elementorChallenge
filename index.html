@@ -83,15 +83,15 @@ body{
 
 .overlay-container {
     position: absolute;
-    bottom: 20px;
-    left: 0;
+    left: 200px;
+    bottom: 11em;
     width: 100%;
     text-align: center;
 }
 
 .over {
     position: absolute;
-    bottom: 0;
+    left: -100px; /* Start offscreen */
     left: 50%;
     transform: translateX(-50%);
     padding: 15px;
@@ -100,16 +100,11 @@ body{
     text-transform: uppercase;
     color: white;
     background-color: rgba(36, 74, 194, 0.7);
-    display: none;
+    opacity: 0;
 }
 
 .over.active {
-    display: block;
-    position: absolute;
-    bottom: 227px;
-    left: 268px;
     background-color: #244AC2;
-    color: white;
     padding: 31px 115px;
     font-size: 24px;
     text-transform: uppercase;
@@ -117,8 +112,8 @@ body{
 
 .over-black {
     position: absolute;
-    top: -271px;
-    right: 57px;
+    top: 50px;
+    right: 250px;
     transform: translate(50%, -50%);
     background: black;
     color: #000000;
@@ -447,19 +442,10 @@ span {
                     <img src="/Images/SOLOMON-OMOGBOYE_01-scaled.jpg" alt="BannerPic">
                 </div>
                 <div class="mySlides">
-                    <img src="https://i.ibb.co/qFMDsSg/e751b6abc01174a89b863a79590ba24c-transformed.jpg" alt="BannerPic2">
+                    <img src="/Images/pexels-jopwell-2422293.jpg" alt="BannerPic2">
                 </div>
                 <div class="mySlides">
-                    <img src="https://i.ibb.co/KzFWnWD/4c970e2a29cdc3b388bf4e00e7b36ab0-1-transformed.jpg" alt="BannerPic3">
-                </div>
-                <div class="mySlides">
-                    <img src="https://i.ibb.co/RT7rT4G/3a6e22213a064c5c89877fc05951d19c-transformed.jpg" alt="BannerPic4">
-                </div>
-                <div class="mySlides">
-                    <img src="https://i.ibb.co/RT7rT4G/3a6e22213a064c5c89877fc05951d19c-transformed.jpg" alt="BannerPic5">
-                </div>
-                <div class="mySlides">
-                    <img src="https://i.ibb.co/RT7rT4G/3a6e22213a064c5c89877fc05951d19c-transformed.jpg" alt="BannerPic6">
+                    <img src="/Images/lycs-architecture-U2BI3GMnSSE-unsplash.jpg" alt="BannerPic3">
                 </div>
                 <div class="controls">
                     <span class="prev" onclick="plusSlides(-1)">&#10094;</span>
@@ -475,9 +461,8 @@ span {
             <!-- Overlay container outside slideshow container -->
             <div class="overlay-container">
                 <div class="over over-blue">Look Beyond The Ordinary</div>
-                    <div class="over over-blue">Explore The Beauty of the world</div>
-                    <div class="over over-blue">Embrace The Adventure</div>
-                    <div class="over over-blue">Discover The Essence of Community</div>
+                    <div class="over over-blue">We leave no stone unturned</div>
+                    <div class="over over-blue">We can and we will</div>
                 <div class="over-black">.</div>
             </div>
 
@@ -522,54 +507,57 @@ span {
             <div class="small-box">Risk Management</div>
         </div>
     </div>
-    
-       
-     
-
-
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            let slideIndex = 0;
-            const slides = $(".mySlides");
-            const dots = $(".dot");
-            const overlays = $(".over");
-            const transitionTime = 500; // Transition time in milliseconds
-    
-            function showSlides() {
-                slides.fadeOut(transitionTime);
-                overlays.removeClass("active");
-    
-                slideIndex = (slideIndex + slides.length) % slides.length;
-    
-                slides.eq(slideIndex).fadeIn(transitionTime);
-                overlays.eq(slideIndex).addClass("active");
-                dots.removeClass("active").eq(slideIndex).addClass("active");
-            }
-    
-            function plusSlides(n) {
-                slideIndex += n;
-                showSlides();
-            }
-    
-            $(".next").click(function() {
-                plusSlides(1);
-            });
-    
-            $(".dot").click(function() {
-                slideIndex = $(".dot").index(this);
-                showSlides();
-            });
-    
-            // Auto-advance slides every 5 seconds
-            setInterval(function() {
-                plusSlides(1);
-            }, 5000);
-    
-            // Initial slide display
-            showSlides();
+      $(document).ready(function() {
+    let slideIndex = 0;
+    let slideDuration = 500; // duration of slide animation in milliseconds
+
+    showSlides(slideIndex);
+
+    function showSlides(n) {
+        let slides = $(".mySlides");
+        let dots = $(".dot");
+        let overlays = $(".over");
+
+        if (n >= slides.length) { slideIndex = 0 }
+        if (n < 0) { slideIndex = slides.length - 1 }
+
+        slides.hide();
+        dots.removeClass("active");
+
+        slides.eq(slideIndex).show();
+        dots.eq(slideIndex).addClass("active");
+
+        // Slide in the corresponding overlay
+        overlays.stop(true, true).animate({left: '-100px', opacity: 0}, slideDuration / 2, function() {
+            overlays.removeClass("active");
+            overlays.eq(slideIndex).addClass("active").css({left: '0', opacity: 1})
+                .animate({left: '30px', opacity: 1}, slideDuration);
         });
+    }
+
+    function nextSlide() {
+        slideIndex++;
+        showSlides(slideIndex);
+    }
+
+    function prevSlide() {
+        slideIndex--;
+        showSlides(slideIndex);
+    }
+
+    $(".next").click(nextSlide);
+    $(".dot").click(function() {
+        let index = $(this).index();
+        slideIndex = index;
+        showSlides(slideIndex);
+    });
+
+    // Initially show the first overlay
+    showSlides(slideIndex);
+});
         </script>
 </body>
 </html>
